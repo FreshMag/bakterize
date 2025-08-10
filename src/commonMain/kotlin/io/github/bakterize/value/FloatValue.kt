@@ -1,5 +1,6 @@
 package io.github.bakterize.value
 
+import io.github.bakterize.util.toFixedString
 import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
 
@@ -12,7 +13,7 @@ data class FloatValue(
 
     override fun cast(targetType: Type): Value =
         when (targetType) {
-            Type.STRING -> StringValue(value.toString())
+            Type.STRING -> StringValue(value.toFixedString())
             Type.INTEGER -> IntValue(value.toInt())
             Type.FLOAT -> this
             Type.BOOLEAN -> BooleanValue(value != 0.0)
