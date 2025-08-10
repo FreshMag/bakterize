@@ -36,7 +36,7 @@ class OperatorSpec : StringSpec({
             row(BinaryOperatorKind.CONCAT, StringValue("12")),
             *comparisons.toTypedArray(),
             testfn = { operator: BinaryOperatorKind, result: Value ->
-                BinaryOperator(
+                BinaryOperation(
                     left = LiteralNode(Value.ofInt(1), null),
                     right = LiteralNode(Value.ofInt(2), null),
                     operator = operator,
@@ -57,7 +57,7 @@ class OperatorSpec : StringSpec({
             row(BinaryOperatorKind.CONCAT, StringValue("1.02.0")),
             *comparisons.toTypedArray(),
         ) { operator, result ->
-            BinaryOperator(
+            BinaryOperation(
                 left = LiteralNode(Value.ofDouble(1.0), null),
                 right = LiteralNode(Value.ofDouble(2.0), null),
                 operator = operator,
@@ -73,7 +73,7 @@ class OperatorSpec : StringSpec({
             row(BinaryOperatorKind.CONCAT, StringValue("12")),
             *comparisons.toTypedArray(),
         ) { operator, result ->
-            BinaryOperator(
+            BinaryOperation(
                 left = LiteralNode(Value.ofString("1"), null),
                 right = LiteralNode(Value.ofString("2"), null),
                 operator = operator,
@@ -90,7 +90,7 @@ class OperatorSpec : StringSpec({
             row(BinaryOperatorKind.OR, BooleanValue(true)),
             row(BinaryOperatorKind.AND, BooleanValue(false)),
         ) { operator, result ->
-            BinaryOperator(
+            BinaryOperation(
                 left = LiteralNode(Value.ofBoolean(true), null),
                 right = LiteralNode(Value.ofBoolean(false), null),
                 operator = operator,

@@ -22,7 +22,7 @@ enum class BinaryOperatorKind {
     OR,
 }
 
-data class BinaryOperator(
+data class BinaryOperation(
     val left: Node,
     val right: Node,
     val operator: BinaryOperatorKind,
