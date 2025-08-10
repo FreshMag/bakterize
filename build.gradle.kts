@@ -70,10 +70,6 @@ kotlin {
 
             dependencies {
                 implementation(libs.antlr.runtime)
-                implementation(libs.yamlkt)
-                implementation(libs.json)
-                implementation(libs.kotlinx.io)
-                implementation(libs.kotlinx.coroutines)
             }
         }
 
