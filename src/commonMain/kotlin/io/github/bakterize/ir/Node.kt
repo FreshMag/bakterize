@@ -17,10 +17,20 @@ sealed class Node(
 
 data class LiteralNode(
     val value: Value,
-    override val source: String?,
+    override val source: String? = null,
 ) : Node(source) {
     override fun eval(
         ctx: Context,
         evaluator: Evaluator,
     ) = sequenceOf(Scalar(value))
+}
+
+data class IdentifierNode(
+    val name: String,
+    override val source: String? = null,
+) : Node(source) {
+    override fun eval(
+        ctx: Context,
+        evaluator: Evaluator,
+    ): EvalResult = ctx.lookup(name)
 }
