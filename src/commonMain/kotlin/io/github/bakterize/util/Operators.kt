@@ -49,3 +49,5 @@ fun BinaryOperatorKind.applyToValue(
         BinaryOperatorKind.AND -> left.and(right)
         BinaryOperatorKind.OR -> left.or(right)
     }
+
+fun Double.toFixedString(): String = if (this % 1 == 0.0) "${this.toInt()}.0" else this.toString()
