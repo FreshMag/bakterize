@@ -1,7 +1,7 @@
 {
   "name": "bakterize",
   "devDependencies": {
-    "semantic-release-preconfigured-conventional-commits": "1.1.150"
+    "semantic-release-preconfigured-conventional-commits": "1.1.152"
   },
   "engines": {
     "node": "22.21.0"
