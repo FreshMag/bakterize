@@ -86,4 +86,13 @@ object Util {
             is Double -> LiteralNode(Value.ofDouble(this))
             else -> throw IllegalArgumentException("Unsupported type: ${this.let { it::class }}")
         }
+
+    fun stmt(
+        stmt: Node,
+        expression: Node,
+    ) = StatementNode(stmt, expression)
+
+    infix fun String.bounded(value: Node) = SimpleDeclarationNode(this, value)
+
+    infix fun String.unbounded(value: Node) = FreeDeclarationNode(this, value)
 }

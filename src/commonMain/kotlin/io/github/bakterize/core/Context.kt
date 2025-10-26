@@ -1,6 +1,8 @@
 package io.github.bakterize.core
 
-sealed class EvalResult : Sequence<Instance>
+sealed class EvalResult(
+    var newContext: Context? = null,
+) : Sequence<Instance>
 
 data class Single(
     val instance: Instance,
