@@ -134,4 +134,46 @@ class CallSpec : StringSpec({
                 25.scalar(),
             )
     }
+
+    "Correct context evaluation in nested calls" {
+        context(
+            "outerFunc" to
+                listOf(
+                    func(
+                        "innerFunc".id().invoke("a".id()),
+                        context(
+                            "a" to listOf(3.asIntValue(), 4.asIntValue()),
+                            "innerFunc" to
+                                listOf(
+                                    func("x".id() * 2.literal(), context(), "x"),
+                                ),
+                        ),
+                        "a",
+                    ),
+                ),
+            "a" to listOf(3.asIntValue(), 4.asIntValue()),
+        ).evalNode(
+            "outerFunc".id().invoke(),
+        ).toList() shouldBe
+            listOf(
+                6.scalar(),
+                8.scalar(),
+            )
+    }
+
+    "Function call in a binary operation" {
+        context(
+            "x" to listOf(5.asIntValue(), 10.asIntValue()),
+            "double" to
+                listOf(
+                    func("n".id() * 2.literal(), context(), "n"),
+                ),
+        ).evalNode(
+            "x".id() + "double".id().invoke(17.literal()),
+        ).toList() shouldContainExactlyInAnyOrder
+            listOf(
+                39.scalar(),
+                44.scalar(),
+            )
+    }
 })

@@ -9,7 +9,7 @@ class Evaluator {
         node: Node,
     ): EvalResult {
         val vars = SymbolVisitor.collectSymbols(node)
-        val domains = vars.map { v -> ctx.bindings[v]!! }
+        val domains = vars.map { v -> ctx.bindings[v] ?: throw IllegalArgumentException("No binding for variable $v") }
 
         return cartesianProduct(domains)
             .flatMap { values ->

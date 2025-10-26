@@ -26,7 +26,7 @@ class FunctionValue(
                 acc.withBinding(name, sequenceOf(Scalar(value)))
             }
 
-        return evaluator.evaluate(filledContext, body).also { println(it.toList()) }
+        return evaluator.evaluate(filledContext, body)
     }
 
     override fun cast(targetType: Type): Value {
