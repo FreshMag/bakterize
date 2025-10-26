@@ -1,13 +1,8 @@
 package io.github.bakterize.value
 
-import kotlin.js.ExperimentalJsExport
-import kotlin.js.JsExport
-
 /**
  * Represents the type of IR node.
  */
-@OptIn(ExperimentalJsExport::class)
-@JsExport
 enum class Type {
     STRING,
     INTEGER,
@@ -16,10 +11,9 @@ enum class Type {
     UNDEFINED,
     BOOLEAN,
     OBJECT,
+    FUNCTION,
 }
 
-@OptIn(ExperimentalJsExport::class)
-@JsExport
 @Suppress("TooManyFunctions")
 sealed class Value(
     val type: Type,
@@ -40,6 +34,8 @@ sealed class Value(
     fun castToBoolean(): BooleanValue = cast(Type.BOOLEAN) as BooleanValue
 
     fun castToFloat(): FloatValue = cast(Type.FLOAT) as FloatValue
+
+    fun castToFunction(): FunctionValue = cast(Type.FUNCTION) as FunctionValue
 
     infix fun concat(other: Value): Value = StringValue(castToString().value + other.castToString().value)
 
@@ -91,7 +87,7 @@ sealed class Value(
             is StringValue -> value.toIntOrNull()
             is BooleanValue -> if (value) 1 else 0
             is FloatValue -> value.toInt()
-            is ObjectValue -> null
+            else -> null
         }
 
     fun toBooleanOrNull(): Boolean? =
@@ -100,7 +96,7 @@ sealed class Value(
             is StringValue -> value.toBooleanStrictOrNull()
             is IntValue -> value != 0
             is FloatValue -> value != 0.0
-            is ObjectValue -> null
+            else -> null
         }
 
     fun toDoubleOrNull(): Double? =
@@ -109,7 +105,7 @@ sealed class Value(
             is IntValue -> value.toDouble()
             is StringValue -> value.toDoubleOrNull()
             is BooleanValue -> if (value) 1.0 else 0.0
-            is ObjectValue -> null
+            else -> null
         }
 
     companion object {

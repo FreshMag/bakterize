@@ -1,10 +1,5 @@
 package io.github.bakterize.value
 
-import kotlin.js.ExperimentalJsExport
-import kotlin.js.JsExport
-
-@JsExport
-@OptIn(ExperimentalJsExport::class)
 data class BooleanValue(
     val value: Boolean,
 ) : Value(Type.BOOLEAN) {

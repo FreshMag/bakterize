@@ -1,6 +1,7 @@
 package io.github.bakterize.ir.visitor
 
 import io.github.bakterize.ir.BinaryOperation
+import io.github.bakterize.ir.CallNode
 import io.github.bakterize.ir.IdentifierNode
 import io.github.bakterize.ir.LiteralNode
 import io.github.bakterize.ir.Node
@@ -24,7 +25,13 @@ abstract class Visitor<T, R>(
             is BinaryOperation -> visitBinaryOperation(node, acc)
             is IdentifierNode -> visitIdentifier(node, acc)
             is LiteralNode -> visitLiteral(node, acc)
+            is CallNode -> visitCall(node, acc)
         }
+
+    open fun visitCall(
+        node: CallNode,
+        acc: R,
+    ): T = visitDefault(node, acc)
 
     open fun visitLiteral(
         node: LiteralNode,

@@ -1,10 +1,5 @@
 package io.github.bakterize.value
 
-import kotlin.js.ExperimentalJsExport
-import kotlin.js.JsExport
-
-@OptIn(ExperimentalJsExport::class)
-@JsExport
 data class StringValue(
     val value: String,
 ) : Value(Type.STRING) {

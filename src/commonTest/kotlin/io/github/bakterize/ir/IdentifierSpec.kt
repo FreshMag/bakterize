@@ -1,9 +1,9 @@
 package io.github.bakterize.ir
 
 import io.github.bakterize.core.Context
-import io.github.bakterize.core.Evaluator
 import io.github.bakterize.core.ListInstance
 import io.github.bakterize.core.Scalar
+import io.github.bakterize.ir.Util.eval
 import io.github.bakterize.util.scalar
 import io.github.bakterize.value.Value
 import io.github.bakterize.value.Value.Companion.asStringValue
@@ -11,11 +11,6 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 class IdentifierSpec : StringSpec({
-
-    fun eval(
-        context: Context,
-        node: Node,
-    ) = Evaluator().evaluate(context, node)
 
     "Simple identifier" {
         val identifier = IdentifierNode("test")

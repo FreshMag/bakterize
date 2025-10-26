@@ -31,4 +31,9 @@ data class Context(
         name: String,
         valueSeq: Sequence<Instance>,
     ): Context = copy(bindings = bindings + (name to valueSeq))
+
+    fun withAssignment(
+        name: String,
+        value: Instance,
+    ): Context = copy(assignment = assignment + (name to value))
 }

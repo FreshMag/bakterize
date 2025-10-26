@@ -1,10 +1,5 @@
 package io.github.bakterize.value
 
-import kotlin.js.ExperimentalJsExport
-import kotlin.js.JsExport
-
-@OptIn(ExperimentalJsExport::class)
-@JsExport
 data class IntValue(
     val value: Int,
 ) : Value(Type.INTEGER) {
@@ -38,6 +33,7 @@ data class IntValue(
             is BooleanValue -> throw UnsupportedOperationException("Cannot add boolean value $other to int: $this")
             is FloatValue -> FloatValue(value.toDouble() + other.value)
             is ObjectValue -> throw UnsupportedOperationException("Cannot add object value $other to int: $this")
+            is FunctionValue -> throw UnsupportedOperationException("Cannot add function value $other to int: $this")
         }
 
     override fun minus(other: Value): Value =
@@ -53,6 +49,7 @@ data class IntValue(
             is BooleanValue -> throw UnsupportedOperationException("Cannot subtract boolean value from $this")
             is FloatValue -> FloatValue(value.toDouble() - other.value)
             is ObjectValue -> throw UnsupportedOperationException("Cannot subtract object value $other from $this")
+            is FunctionValue -> throw UnsupportedOperationException("Cannot subtract function value $other from $this")
         }
 
     override fun times(other: Value): Value =
@@ -66,6 +63,9 @@ data class IntValue(
             is BooleanValue -> throw UnsupportedOperationException("Cannot multiply boolean value $other with $this")
             is FloatValue -> FloatValue(value.toDouble() * other.value)
             is ObjectValue -> throw UnsupportedOperationException("Cannot multiply object value $other with int: $this")
+            is FunctionValue -> throw UnsupportedOperationException(
+                "Cannot multiply function value $other with int: $this",
+            )
         }
 
     override fun div(other: Value): Value =
@@ -86,6 +86,7 @@ data class IntValue(
             is BooleanValue -> throw UnsupportedOperationException("Cannot divide boolean value by $this")
             is FloatValue -> FloatValue(value.toDouble() / other.value)
             is ObjectValue -> throw UnsupportedOperationException("Cannot divide object value $other by int: $this")
+            is FunctionValue -> throw UnsupportedOperationException("Cannot divide function value $other by int: $this")
         }
 
     override fun rem(other: Value): Value =
@@ -106,6 +107,9 @@ data class IntValue(
             is BooleanValue -> throw UnsupportedOperationException("Cannot modulo boolean value $other with $this")
             is FloatValue -> FloatValue(value.toDouble() % other.value)
             is ObjectValue -> throw UnsupportedOperationException("Cannot modulo object value $other with int: $this")
+            is FunctionValue -> throw UnsupportedOperationException(
+                "Cannot modulo function value $other with int: $this",
+            )
         }
 
     override fun unaryMinus(): Value = IntValue(-value)
@@ -117,5 +121,8 @@ data class IntValue(
             is StringValue -> throw UnsupportedOperationException("Cannot compare int value $this with string $other")
             is BooleanValue -> throw UnsupportedOperationException("Cannot compare int value $this with boolean $other")
             is ObjectValue -> throw UnsupportedOperationException("Cannot compare int value $this with object $other")
+            is FunctionValue -> throw UnsupportedOperationException(
+                "Cannot compare function value $this with object $other",
+            )
         }
 }

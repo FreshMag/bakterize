@@ -1,11 +1,7 @@
 package io.github.bakterize.value
 
 import io.github.bakterize.util.toFixedString
-import kotlin.js.ExperimentalJsExport
-import kotlin.js.JsExport
 
-@OptIn(ExperimentalJsExport::class)
-@JsExport
 data class FloatValue(
     val value: Double,
 ) : Value(Type.FLOAT) {
@@ -39,6 +35,8 @@ data class FloatValue(
             is BooleanValue ->
                 throw UnsupportedOperationException("Cannot add boolean value ${other.value} to float: ${this.value}")
             is FloatValue -> FloatValue(value + other.value)
+            is FunctionValue ->
+                throw UnsupportedOperationException("Cannot add function value $other to float: ${this.value}")
             is ObjectValue ->
                 throw UnsupportedOperationException("Cannot add object value $other to float: ${this.value}")
         }
@@ -59,6 +57,10 @@ data class FloatValue(
             is ObjectValue -> throw UnsupportedOperationException(
                 "Cannot add object value $other to float: ${this.value}",
             )
+
+            is FunctionValue -> throw UnsupportedOperationException(
+                "Cannot add function value $other to float: ${this.value}",
+            )
         }
 
     override fun times(other: Value): Value =
@@ -75,6 +77,10 @@ data class FloatValue(
             is FloatValue -> FloatValue(value * other.value)
             is ObjectValue -> throw UnsupportedOperationException(
                 "Cannot multiply object value $other with float: ${this.value}",
+            )
+
+            is FunctionValue -> throw UnsupportedOperationException(
+                "Cannot multiply function value $other with float: ${this.value}",
             )
         }
 
@@ -96,6 +102,9 @@ data class FloatValue(
             )
             is FloatValue -> FloatValue(value / other.value)
             is ObjectValue -> throw UnsupportedOperationException("Cannot divide object value $other by ${this.value}")
+            is FunctionValue -> throw UnsupportedOperationException(
+                "Cannot divide function value $other by ${this.value}",
+            )
         }
 
     override fun rem(other: Value): Value =
@@ -116,6 +125,9 @@ data class FloatValue(
             )
             is FloatValue -> FloatValue(value % other.value)
             is ObjectValue -> throw UnsupportedOperationException("Cannot modulo object value $other by ${this.value}")
+            is FunctionValue -> throw UnsupportedOperationException(
+                "Cannot modulo function value $other by ${this.value}",
+            )
         }
 
     override fun unaryMinus(): Value = FloatValue(-value)

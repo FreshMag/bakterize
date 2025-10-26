@@ -1,10 +1,5 @@
 package io.github.bakterize.value
 
-import kotlin.js.ExperimentalJsExport
-import kotlin.js.JsExport
-
-@OptIn(ExperimentalJsExport::class)
-@JsExport
 class ObjectValue : Value(Type.OBJECT) {
     override fun cast(targetType: Type): Value {
         TODO("Not yet implemented")
