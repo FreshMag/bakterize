@@ -21,21 +21,45 @@ class Empty : EvalResult() {
 }
 
 data class Context(
-    val bindings: Map<String, Sequence<Instance>>,
-    val assignment: Map<String, Instance> = emptyMap(),
+    private val variables: Variables = Variables(),
+    private val bindings: Bindings = Bindings(),
     val parent: Context? = null,
 ) {
-    fun lookup(name: String): Instance? =
-        assignment[name]
+    fun lookup(name: String): Binding? =
+        bindings[name]
             ?: parent?.lookup(name)
 
-    fun withBinding(
-        name: String,
-        valueSeq: Sequence<Instance>,
-    ): Context = copy(bindings = bindings + (name to valueSeq))
+    fun findVariable(name: Symbol): Variable? =
+        variables[name]
+            ?: parent?.findVariable(name)
+
+    fun instancesOf(name: Symbol): EvalResult =
+        lookup(name)
+            ?.let { Single(it.value) }
+            ?: findVariable(name)
+                ?.let { Cartesian(it.values) }
+            ?: Empty()
+
+    fun withVariable(
+        name: Symbol,
+        multiValue: MultiValue,
+    ): Context = copy(variables = variables + (name to Variable(name, multiValue)))
+
+    fun withVariables(vararg newVariables: Pair<Symbol, MultiValue>): Context =
+        copy(
+            variables =
+                Variables(
+                    variables +
+                        newVariables.associate { (name, values) ->
+                            name to Variable(name, values)
+                        },
+                ),
+        )
 
     fun withAssignment(
-        name: String,
+        name: Symbol,
         value: Instance,
-    ): Context = copy(assignment = assignment + (name to value))
+    ): Context = copy(bindings = bindings + (name to value))
+
+    fun hasBinding(symbol: Symbol): Boolean = lookup(symbol) != null
 }

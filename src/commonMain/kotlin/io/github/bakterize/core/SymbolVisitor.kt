@@ -14,6 +14,6 @@ class SymbolVisitor : Visitor<MutableSet<String>, MutableSet<String>>({ _, acc -
     }
 
     companion object {
-        fun collectSymbols(node: Node): Set<String> = SymbolVisitor().visit(node, mutableSetOf()).toSet()
+        fun collectSymbols(node: Node): Set<Symbol> = SymbolVisitor().visit(node, mutableSetOf()).toSet()
     }
 }

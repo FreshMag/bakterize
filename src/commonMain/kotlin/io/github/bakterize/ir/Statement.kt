@@ -13,11 +13,11 @@ data class StatementNode(
     override val children: List<Node>
         get() = listOf(statement)
 
-    override fun eval(
+    override fun evaluateLocally(
         ctx: Context,
         evaluator: Evaluator,
     ): EvalResult {
-        val stmtResult = statement.eval(ctx, evaluator)
+        val stmtResult = evaluator.evaluate(ctx, statement)
         val newCtx = stmtResult.newContext ?: ctx
         return evaluator.evaluate(newCtx, expression)
     }
@@ -32,11 +32,11 @@ sealed class DeclarationNode(
     override val children: List<Node>
         get() = listOf(value)
 
-    override fun eval(
+    override fun evaluateLocally(
         ctx: Context,
         evaluator: Evaluator,
     ): EvalResult {
-        val newCtx = ctx.withBinding(name, resolution(value, ctx, evaluator))
+        val newCtx = ctx.withVariable(name, resolution(value, ctx, evaluator))
         return Empty().apply { newContext = newCtx }
     }
 }
@@ -51,26 +51,6 @@ sealed class DeclarationNode(
  * x + y            // y doesn't free the binding of x, so this evaluates to [20, 25] and not [20, 25, 20, 25]
  */
 data class SimpleDeclarationNode(
-    override val name: String,
-    override val value: Node,
-    override val source: String? = null,
-) : DeclarationNode(
-        name,
-        value,
-        { node, ctx, evaluator -> value.eval(ctx, evaluator) },
-        source,
-    )
-
-/**
- * Represents a PERMUTATING declaration of a variable. That is, declaring a variable with this node FREES
- * the binding between symbols.
- * E.g.
- * ```
- * let x = [5, 10];
- * let y = x + 10;  // permutating declaration of y unbound to x, so generates higher cardinality
- * x + y            // this evaluates to [20, 25, 20, 25]
- */
-data class FreeDeclarationNode(
     override val name: String,
     override val value: Node,
     override val source: String? = null,

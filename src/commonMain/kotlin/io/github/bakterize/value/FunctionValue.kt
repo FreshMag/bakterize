@@ -9,7 +9,7 @@ import io.github.bakterize.ir.Node
 class FunctionValue(
     val argsIdentifiers: List<String>,
     val body: Node,
-    val originalContext: Context = Context(emptyMap()),
+    val originalContext: Context = Context(),
 ) : Value(Type.FUNCTION) {
     operator fun invoke(
         evaluator: Evaluator,
@@ -23,7 +23,7 @@ class FunctionValue(
         }
         val filledContext =
             argsIdentifiers.zip(args).fold(originalContext) { acc, (name, value) ->
-                acc.withBinding(name, sequenceOf(Scalar(value)))
+                acc.withVariable(name, sequenceOf(Scalar(value)))
             }
 
         return evaluator.evaluate(filledContext, body)
@@ -50,7 +50,7 @@ class FunctionValue(
         fun withNodeBody(
             argsIdentifiers: List<String>,
             bodyNode: Node,
-            originalContext: Context = Context(emptyMap()),
+            originalContext: Context = Context(),
         ): FunctionValue =
             FunctionValue(
                 argsIdentifiers,

@@ -32,14 +32,14 @@ data class BinaryOperation(
     override val children: List<Node>
         get() = listOf(left, right)
 
-    override fun eval(
+    override fun evaluateLocally(
         ctx: Context,
         evaluator: Evaluator,
     ): EvalResult =
-        left
-            .eval(ctx, evaluator)
+        evaluator
+            .evaluate(ctx, left)
             .flatMap { lv ->
-                right.eval(ctx, evaluator).map { rv ->
+                evaluator.evaluate(ctx, right).map { rv ->
                     operator.apply(lv, rv)
                 }
             }.run { Cartesian(this) }

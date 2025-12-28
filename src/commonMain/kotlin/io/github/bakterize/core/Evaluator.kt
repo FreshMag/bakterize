@@ -8,14 +8,19 @@ class Evaluator {
         ctx: Context,
         node: Node,
     ): EvalResult {
-        val vars = SymbolVisitor.collectSymbols(node)
-        val domains = vars.map { v -> ctx.bindings[v] ?: throw IllegalArgumentException("No binding for variable $v") }
-
-        return cartesianProduct(domains)
-            .flatMap { values ->
-                val assignment = vars.zip(values).toMap()
-                val assignedCtx = ctx.copy(assignment = assignment)
-                node.eval(assignedCtx, this)
-            }.run { Cartesian(this) }
+        val vars = SymbolVisitor.collectSymbols(node).filterNot { ctx.hasBinding(it) }
+        val domains =
+            vars.map { v ->
+                ctx.findVariable(v) ?: throw IllegalArgumentException("No binding for variable $v")
+            }
+        return if (domains.isEmpty()) {
+            node.evaluateLocally(ctx, this)
+        } else {
+            cartesianProduct(domains)
+                .flatMap { bindings ->
+                    val assignedCtx = ctx.copy(bindings = Bindings(bindings.associateBy { it.symbol }))
+                    node.evaluateLocally(assignedCtx, this)
+                }.run { Cartesian(this) }
+        }
     }
 }

@@ -2,7 +2,6 @@ package io.github.bakterize.ir
 
 import io.github.bakterize.core.Cartesian
 import io.github.bakterize.core.Context
-import io.github.bakterize.core.Empty
 import io.github.bakterize.core.EvalResult
 import io.github.bakterize.core.Evaluator
 import io.github.bakterize.core.Instance
@@ -17,7 +16,12 @@ sealed class Node(
 ) {
     abstract val children: List<Node>
 
-    abstract fun eval(
+    fun eval(
+        ctx: Context,
+        evaluator: Evaluator,
+    ): EvalResult = evaluator.evaluate(ctx, this)
+
+    abstract fun evaluateLocally(
         ctx: Context,
         evaluator: Evaluator,
     ): EvalResult
@@ -30,7 +34,7 @@ data class LiteralNode(
     override val children: List<Node>
         get() = emptyList()
 
-    override fun eval(
+    override fun evaluateLocally(
         ctx: Context,
         evaluator: Evaluator,
     ) = Single(Scalar(value))
@@ -43,14 +47,10 @@ data class IdentifierNode(
     override val children: List<Node>
         get() = emptyList()
 
-    override fun eval(
+    override fun evaluateLocally(
         ctx: Context,
         evaluator: Evaluator,
-    ): EvalResult =
-        ctx
-            .lookup(name)
-            ?.let { Single(it) }
-            ?: Empty()
+    ): EvalResult = ctx.instancesOf(name)
 }
 
 data class CallNode(
@@ -62,11 +62,11 @@ data class CallNode(
         get() = listOf(callee) + arguments
 
     @Suppress("UseRequire")
-    override fun eval(
+    override fun evaluateLocally(
         ctx: Context,
         evaluator: Evaluator,
     ): EvalResult {
-        val calleeResults = callee.eval(ctx, evaluator)
+        val calleeResults = evaluator.evaluate(ctx, callee)
         return calleeResults
             .flatMap { calleeInstance ->
                 if (calleeInstance !is Scalar || calleeInstance.value.type != Type.FUNCTION) {
@@ -76,7 +76,7 @@ data class CallNode(
                 val function = calleeInstance.value.castToFunction()
 
                 val argResults: List<EvalResult> =
-                    arguments.map { argNode -> argNode.eval(ctx, evaluator) }
+                    arguments.map { argNode -> evaluator.evaluate(ctx, argNode) }
 
                 val argCombinations: Sequence<List<Instance>> = cartesianProduct(argResults)
                 argCombinations.flatMap { args ->
