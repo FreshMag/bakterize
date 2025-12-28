@@ -1,14 +1,14 @@
 package io.github.bakterize.ir
 
+import io.github.bakterize.dsl.Core.func
+import io.github.bakterize.dsl.Core.id
+import io.github.bakterize.dsl.Core.invoke
+import io.github.bakterize.dsl.Core.literal
+import io.github.bakterize.dsl.Core.minus
+import io.github.bakterize.dsl.Core.plus
+import io.github.bakterize.dsl.Core.times
 import io.github.bakterize.ir.Util.context
 import io.github.bakterize.ir.Util.evalNode
-import io.github.bakterize.ir.Util.func
-import io.github.bakterize.ir.Util.id
-import io.github.bakterize.ir.Util.invoke
-import io.github.bakterize.ir.Util.literal
-import io.github.bakterize.ir.Util.minus
-import io.github.bakterize.ir.Util.plus
-import io.github.bakterize.ir.Util.times
 import io.github.bakterize.util.scalar
 import io.github.bakterize.value.Value.Companion.asIntValue
 import io.kotest.core.spec.style.StringSpec

@@ -1,13 +1,13 @@
 package io.github.bakterize.ir
 
+import io.github.bakterize.dsl.Core.id
+import io.github.bakterize.dsl.Core.literal
+import io.github.bakterize.dsl.Core.minus
+import io.github.bakterize.dsl.Core.plus
+import io.github.bakterize.dsl.Core.stmt
 import io.github.bakterize.ir.Util.bounded
 import io.github.bakterize.ir.Util.context
 import io.github.bakterize.ir.Util.evalNode
-import io.github.bakterize.ir.Util.id
-import io.github.bakterize.ir.Util.literal
-import io.github.bakterize.ir.Util.minus
-import io.github.bakterize.ir.Util.plus
-import io.github.bakterize.ir.Util.stmt
 import io.github.bakterize.util.scalar
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
