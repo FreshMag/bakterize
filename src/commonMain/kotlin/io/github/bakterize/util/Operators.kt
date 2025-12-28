@@ -1,7 +1,6 @@
 package io.github.bakterize.util
 
 import io.github.bakterize.core.Instance
-import io.github.bakterize.core.ListInstance
 import io.github.bakterize.core.Scalar
 import io.github.bakterize.ir.BinaryOperatorKind
 import io.github.bakterize.value.Value
@@ -12,18 +11,8 @@ object Operators {
         right: Instance,
     ): Instance =
         when {
-            // Both scalars → direct apply
             left is Scalar && right is Scalar ->
                 Scalar(applyToValue(left.value, right.value))
-
-            left is ListInstance && right is Scalar ->
-                ListInstance(left.instances.map { apply(it, right) })
-
-            left is Scalar && right is ListInstance ->
-                ListInstance(right.instances.map { apply(left, it) })
-
-            left is ListInstance && right is ListInstance ->
-                ListInstance(left.instances.flatMap { l -> right.instances.map { r -> apply(l, r) } })
 
             else -> error("Unsupported instance types: ${left::class} ${right::class}")
         }
