@@ -3,6 +3,7 @@ package io.github.bakterize.ir
 import io.github.bakterize.core.Context
 import io.github.bakterize.core.Evaluator
 import io.github.bakterize.core.Scalar
+import io.github.bakterize.core.Variables
 import io.github.bakterize.value.FunctionValue
 import io.github.bakterize.value.Value
 
@@ -13,8 +14,8 @@ object Util {
     ) = Evaluator().evaluate(context, node)
 
     fun context(vararg pairs: Pair<String, List<Any>>): Context =
-        pairs.asList().fold(Context(emptyMap())) { acc, (key, value) ->
-            acc.withBinding(
+        pairs.asList().fold(Context(Variables())) { acc, (key, value) ->
+            acc.withVariable(
                 key,
                 value
                     .map {
@@ -93,6 +94,4 @@ object Util {
     ) = StatementNode(stmt, expression)
 
     infix fun String.bounded(value: Node) = SimpleDeclarationNode(this, value)
-
-    infix fun String.unbounded(value: Node) = FreeDeclarationNode(this, value)
 }

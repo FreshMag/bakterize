@@ -1,7 +1,6 @@
 package io.github.bakterize.ir
 
 import io.github.bakterize.core.Context
-import io.github.bakterize.core.ListInstance
 import io.github.bakterize.core.Scalar
 import io.github.bakterize.ir.Util.eval
 import io.github.bakterize.util.scalar
@@ -16,9 +15,7 @@ class IdentifierSpec : StringSpec({
         val identifier = IdentifierNode("test")
 
         val context =
-            Context(
-                emptyMap(),
-            ).withBinding(
+            Context().withVariable(
                 "test",
                 sequenceOf(
                     42.scalar(),
@@ -35,14 +32,11 @@ class IdentifierSpec : StringSpec({
     "Identifier in a binary operation" {
         val identifier = IdentifierNode("value")
         val context =
-            Context(
-                mapOf(
-                    "value" to
-                        sequenceOf(
-                            1.scalar(),
-                            2.scalar(),
-                            ListInstance(listOf(3.scalar(), 4.scalar())),
-                        ),
+            Context().withVariable(
+                "value",
+                sequenceOf(
+                    1.scalar(),
+                    2.scalar(),
                 ),
             )
         val binaryOperation =
@@ -55,12 +49,6 @@ class IdentifierSpec : StringSpec({
             listOf(
                 4.scalar(),
                 5.scalar(),
-                ListInstance(
-                    listOf(
-                        6.scalar(),
-                        7.scalar(),
-                    ),
-                ),
             )
     }
 
@@ -68,11 +56,9 @@ class IdentifierSpec : StringSpec({
         val identifier1 = IdentifierNode("A")
         val identifier2 = IdentifierNode("B")
         val context =
-            Context(
-                mapOf(
-                    "A" to sequenceOf(1.scalar(), 2.scalar()),
-                    "B" to sequenceOf(3.scalar(), 4.scalar()),
-                ),
+            Context().withVariables(
+                "A" to sequenceOf(1.scalar(), 2.scalar()),
+                "B" to sequenceOf(3.scalar(), 4.scalar()),
             )
         val binaryOperation =
             BinaryOperation(
@@ -95,13 +81,11 @@ class IdentifierSpec : StringSpec({
         val c = IdentifierNode("C")
         val d = IdentifierNode("D")
         val context =
-            Context(
-                mapOf(
-                    "A" to sequenceOf(1.scalar(), 2.scalar(), 3.scalar()),
-                    "B" to sequenceOf(3.scalar(), 4.scalar()),
-                    "C" to sequenceOf(5.scalar(), 6.scalar()),
-                    "D" to sequenceOf(7.scalar(), 8.scalar()),
-                ),
+            Context().withVariables(
+                "A" to sequenceOf(1.scalar(), 2.scalar(), 3.scalar()),
+                "B" to sequenceOf(3.scalar(), 4.scalar()),
+                "C" to sequenceOf(5.scalar(), 6.scalar()),
+                "D" to sequenceOf(7.scalar(), 8.scalar()),
             )
         val binaryOperation1 =
             BinaryOperation(
@@ -137,10 +121,9 @@ class IdentifierSpec : StringSpec({
     "Tied variable" {
         val identifier = IdentifierNode("tied")
         val context =
-            Context(
-                mapOf(
-                    "tied" to sequenceOf(1.scalar(), 2.scalar()),
-                ),
+            Context().withVariable(
+                "tied",
+                sequenceOf(1.scalar(), 2.scalar()),
             )
         val binaryOperation =
             BinaryOperation(
@@ -159,11 +142,9 @@ class IdentifierSpec : StringSpec({
         val tied = IdentifierNode("tied")
         val free = IdentifierNode("free")
         val context =
-            Context(
-                mapOf(
-                    "tied" to sequenceOf(1.scalar(), 2.scalar()),
-                    "free" to sequenceOf(3.scalar(), 4.scalar()),
-                ),
+            Context().withVariables(
+                "tied" to sequenceOf(1.scalar(), 2.scalar()),
+                "free" to sequenceOf(3.scalar(), 4.scalar()),
             )
         val binaryOperation1 = // Tied + Free
             BinaryOperation(
@@ -196,13 +177,12 @@ class IdentifierSpec : StringSpec({
         val a = IdentifierNode("A")
         val b = IdentifierNode("B")
         val context =
-            Context(
-                mapOf(
-                    "C" to sequenceOf(5.scalar(), 6.scalar()),
-                    "B" to sequenceOf(3.scalar(), 4.scalar()),
-                    "A" to sequenceOf(1.scalar(), 2.scalar(), 3.scalar()),
-                ),
+            Context().withVariables(
+                "C" to sequenceOf(5.scalar(), 6.scalar()),
+                "B" to sequenceOf(3.scalar(), 4.scalar()),
+                "A" to sequenceOf(1.scalar(), 2.scalar(), 3.scalar()),
             )
+
         val binaryOperation =
             BinaryOperation(
                 left = a,

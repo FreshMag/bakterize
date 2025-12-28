@@ -8,7 +8,6 @@ import io.github.bakterize.ir.Util.literal
 import io.github.bakterize.ir.Util.minus
 import io.github.bakterize.ir.Util.plus
 import io.github.bakterize.ir.Util.stmt
-import io.github.bakterize.ir.Util.unbounded
 import io.github.bakterize.util.scalar
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -70,27 +69,6 @@ class StatementDeclarationSpec : StringSpec({
                 90.scalar(),
                 190.scalar(),
                 290.scalar(),
-            )
-    }
-
-    "Unbound declaration in statement" {
-        context(
-            "z" to listOf(100, 200),
-        ).evalNode(
-            stmt(
-                "x" unbounded ("z".id() + 10.literal()),
-                "x".id() + "z".id(),
-            ),
-        ).toList() shouldContainExactlyInAnyOrder
-            listOf(
-                210.scalar(),
-                310.scalar(),
-                310.scalar(),
-                410.scalar(),
-                210.scalar(),
-                310.scalar(),
-                310.scalar(),
-                410.scalar(),
             )
     }
 })

@@ -36,12 +36,17 @@ class OperatorSpec : StringSpec({
             row(BinaryOperatorKind.CONCAT, StringValue("12")),
             *comparisons.toTypedArray(),
             testfn = { operator: BinaryOperatorKind, result: Value ->
-                BinaryOperation(
-                    left = LiteralNode(Value.ofInt(1), null),
-                    right = LiteralNode(Value.ofInt(2), null),
-                    operator = operator,
-                ).eval(Context(emptyMap()), Evaluator())
-                    .toSet()
+                val node =
+                    BinaryOperation(
+                        left = LiteralNode(Value.ofInt(1), null),
+                        right = LiteralNode(Value.ofInt(2), null),
+                        operator = operator,
+                    )
+                Evaluator()
+                    .evaluate(
+                        Context(),
+                        node,
+                    ).toSet()
                     .first() shouldBe Scalar(result)
             },
         )
@@ -61,7 +66,7 @@ class OperatorSpec : StringSpec({
                 left = LiteralNode(Value.ofDouble(1.0), null),
                 right = LiteralNode(Value.ofDouble(2.0), null),
                 operator = operator,
-            ).eval(Context(emptyMap()), Evaluator())
+            ).eval(Context(), Evaluator())
                 .toSet()
                 .first() shouldBe Scalar(result)
         }
@@ -77,7 +82,7 @@ class OperatorSpec : StringSpec({
                 left = LiteralNode(Value.ofString("1"), null),
                 right = LiteralNode(Value.ofString("2"), null),
                 operator = operator,
-            ).eval(Context(emptyMap()), Evaluator())
+            ).eval(Context(), Evaluator())
                 .toSet()
                 .first() shouldBe Scalar(result)
         }
@@ -94,7 +99,7 @@ class OperatorSpec : StringSpec({
                 left = LiteralNode(Value.ofBoolean(true), null),
                 right = LiteralNode(Value.ofBoolean(false), null),
                 operator = operator,
-            ).eval(Context(emptyMap()), Evaluator())
+            ).eval(Context(), Evaluator())
                 .toSet()
                 .first() shouldBe Scalar(result)
         }
