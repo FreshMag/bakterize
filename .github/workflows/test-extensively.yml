@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v6.0.3
         with:
           fetch-depth: 0
-      - uses: DanySK/build-check-deploy-gradle-action@4.0.35
+      - uses: DanySK/build-check-deploy-gradle-action@4.0.36
         with:
           check-command: |
             ./gradlew check --parallel
